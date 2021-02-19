@@ -21,7 +21,7 @@ function Header() {
       <Toolbar>
         <Grid container>
           <Grid item sm={6} xs={12}>
-            <Typography variant="h6" color="primary">
+            <Typography variant="h6" color="secondary">
               Freshlogin
             </Typography>
           </Grid>

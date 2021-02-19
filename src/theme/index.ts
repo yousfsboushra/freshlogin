@@ -5,13 +5,16 @@ import { fontSizes } from "./fontsizes";
 export const theme = createMuiTheme({
   palette: {
     primary: {
-      main: colors.white,
+      main: colors.blue,
     },
     secondary: {
-      main: colors.black,
+      main: colors.white,
     },
     text: {
-      primary: colors.black,
+      primary: colors.blue,
+      secondary: colors.lightBlue,
+      disabled: colors.lighterBlue,
+      hint: colors.black,
     },
     background: {
       default: colors.white,
@@ -20,6 +23,7 @@ export const theme = createMuiTheme({
   typography: {
     h1: {
       fontSize: fontSizes.large,
+      color: colors.darkBlue,
     },
     h6: {
       fontSize: fontSizes.medium,
@@ -51,7 +55,7 @@ export const theme = createMuiTheme({
     MuiButton: {
       containedPrimary: {
         color: colors.white,
-        backgroundColor: colors.blue,
+        backgroundColor: colors.darkBlue,
       },
       textPrimary: {
         color: colors.white,
