@@ -20,12 +20,12 @@ function Header() {
     <AppBar position="static" color="default">
       <Toolbar>
         <Grid container>
-          <Grid item xs={6}>
+          <Grid item sm={6} xs={12}>
             <Typography variant="h6" color="primary">
               Freshlogin
             </Typography>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item sm={6} xs={12}>
             <Box className={classes.login}>
               <Menu />
             </Box>
