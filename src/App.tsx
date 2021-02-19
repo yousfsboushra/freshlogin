@@ -1,25 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { lazy, Suspense } from "react";
+import { Grid, ThemeProvider } from "@material-ui/core";
+import { theme } from "./theme/index";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Header from "./components/Header";
+import { pages } from "./pages/pages";
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Suspense fallback={<div></div>}>
+        <ThemeProvider theme={theme}>
+          <Grid container>
+            <Grid item xs={12}>
+              <Header />
+            </Grid>
+            <Grid item xs={12}>
+              <Switch>
+                {pages.map((page) => (
+                  <Route
+                    key={page.key}
+                    path={page.url}
+                    component={page.component}
+                    exact
+                  ></Route>
+                ))}
+                <Route component={NotFound} />
+              </Switch>
+            </Grid>
+          </Grid>
+        </ThemeProvider>
+      </Suspense>
+    </Router>
   );
 }
 
