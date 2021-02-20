@@ -58,11 +58,11 @@ export const executeMutation = (
       successCallback(result, 0);
     })
     .catch((error: ApolloError) => {
-      if (error.graphQLErrors) {
+      if (error.graphQLErrors.length > 0) {
         const errors = extractGraphQLErrors(error);
         errorCallback(errors, 1);
       } else {
-        const errors = ["Something went wrong, please try again."];
+        const errors = [error.message];
         errorCallback(errors, 1);
       }
     });

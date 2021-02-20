@@ -7,13 +7,13 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
-import { useApolloClient, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import { executeMutation } from "../api/clientHelper";
 import { LOGIN_MUTATION } from "../api/mutations";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../app/auth/provider";
+import { NotificationsContext } from "../app/notifications/provider";
 
 const useStyles = makeStyles({
   box: {
@@ -40,20 +40,18 @@ const useStyles = makeStyles({
 
 function Login() {
   const classes = useStyles();
-  const client = useApolloClient();
 
   const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [password, setPassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(true);
-  const [messages, setMessages] = useState([""]);
-  const [isError, setIsError] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginMutation, { loading: loginMutationLoading }] = useMutation(
     LOGIN_MUTATION
   );
   const history = useHistory();
-  const { authState, authDispatch } = useContext(AuthContext);
+  const { authDispatch } = useContext(AuthContext);
+  const { notificationsDispatch } = useContext(NotificationsContext);
 
   useEffect(() => {
     const userjwt = localStorage.getItem("userjwt");
@@ -80,21 +78,21 @@ function Login() {
   };
 
   const setFormMessages = (messages: string[], isError: boolean) => {
-    setMessages(messages);
-    setIsError(isError);
+    notificationsDispatch({
+      type: "NOTIFY",
+      payload: {
+        messages: messages.map((message: string) => ({
+          text: message,
+          isError,
+        })),
+      },
+    });
   };
 
   const loginSuccessCallback = (result: any) => {
     if (result.data.login.jwt !== "") {
       const token = result.data.login.jwt;
-      console.log("Login Data: ", result.data.login.jwt);
-      setFormMessages(
-        [
-          "You have logged in successfully :)",
-          "You will be redirected to your account in 2 seconds",
-        ],
-        false
-      );
+      setFormMessages(["You have logged in successfully :)"], false);
       setIsLoggedIn(true);
       const decodedToken: { id: string } = jwt_decode(token);
       authDispatch({
@@ -104,12 +102,7 @@ function Login() {
           userToken: token,
         },
       });
-      client.clearStore();
-      console.log("dispatch from login", authState);
-
-      setTimeout(() => {
-        history.push("/account");
-      }, 2000);
+      history.push("/account");
     } else {
       setFormMessages(
         ["Something went wrong, please check your credentials and try again."],
@@ -119,7 +112,6 @@ function Login() {
   };
 
   const submitLogin = () => {
-    setFormMessages([""], false);
     executeMutation(
       loginMutation,
       { username: email, password },
@@ -135,20 +127,6 @@ function Login() {
           <Typography className={classes.title} variant="h1">
             Login
           </Typography>
-          {messages.length > 0 && messages[0] !== "" ? (
-            <Box mb="2rem">
-              <MuiAlert
-                variant="filled"
-                severity={isError ? "error" : "success"}
-              >
-                {messages.map((message, index) => (
-                  <Typography key={index}>{message}</Typography>
-                ))}
-              </MuiAlert>
-            </Box>
-          ) : (
-            ""
-          )}
           <form
             onSubmit={(e) => {
               e.preventDefault();

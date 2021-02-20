@@ -6,7 +6,9 @@ import Header from "./components/Header";
 import { pages } from "./pages/pages";
 import { ApolloProvider } from "@apollo/client";
 import AuthProvider from "./app/auth/provider";
+import NotificationsProvider from "./app/notifications/provider";
 import { createApolloClient } from "./api/clientHelper";
+import Notifications from "./components/Notifications";
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
@@ -16,28 +18,31 @@ function App() {
     <Router>
       <Suspense fallback={<div></div>}>
         <AuthProvider>
-          <ThemeProvider theme={theme}>
-            <ApolloProvider client={apolloClient}>
-              <Grid container>
-                <Grid item xs={12}>
-                  <Header />
+          <NotificationsProvider>
+            <ThemeProvider theme={theme}>
+              <ApolloProvider client={apolloClient}>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Header />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Switch>
+                      {pages.map((page) => (
+                        <Route
+                          key={page.key}
+                          path={page.url}
+                          component={page.component}
+                          exact
+                        ></Route>
+                      ))}
+                      <Route component={NotFound} />
+                    </Switch>
+                    <Notifications />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Switch>
-                    {pages.map((page) => (
-                      <Route
-                        key={page.key}
-                        path={page.url}
-                        component={page.component}
-                        exact
-                      ></Route>
-                    ))}
-                    <Route component={NotFound} />
-                  </Switch>
-                </Grid>
-              </Grid>
-            </ApolloProvider>
-          </ThemeProvider>
+              </ApolloProvider>
+            </ThemeProvider>
+          </NotificationsProvider>
         </AuthProvider>
       </Suspense>
     </Router>
