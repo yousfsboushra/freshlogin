@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -31,22 +30,6 @@ function Account() {
   const { authState, authDispatch } = useContext(AuthContext);
   const { notificationsDispatch } = useContext(NotificationsContext);
 
-  const { loading, error, data } = useQuery(ACCOUNT_QUERY, {
-    variables: { id: authState.userId },
-  });
-
-  const setFormMessages = (messages: string[], isError: boolean) => {
-    notificationsDispatch({
-      type: "NOTIFY",
-      payload: {
-        messages: messages.map((message: string) => ({
-          text: message,
-          isError,
-        })),
-      },
-    });
-  };
-
   const parseApolloErrors = (error: ApolloError) => {
     const errors = extractGraphQLErrors(error);
     if (errors.length > 0) {
@@ -70,18 +53,6 @@ function Account() {
     }
   };
 
-  const submitLogout = () => {
-    authDispatch({
-      type: "LOGOUT",
-      payload: {
-        userId: null,
-        userToken: null,
-      },
-    });
-    setFormMessages(["You've logged out successfully"], false);
-    history.push("/");
-  };
-
   const validateAccountResponse = () => {
     if (!authState.isLoggedIn) {
       setFormMessages(
@@ -98,9 +69,39 @@ function Account() {
     }
   };
 
-  useEffect(() => {
-    validateAccountResponse();
-  }, []);
+  const { loading, error, data } = useQuery(ACCOUNT_QUERY, {
+    variables: { id: authState.userId },
+    onCompleted: validateAccountResponse,
+    onError: validateAccountResponse,
+  });
+
+  const setFormMessages = (messages: string[], isError: boolean) => {
+    notificationsDispatch({
+      type: "NOTIFY",
+      payload: {
+        messages: messages.map((message: string) => ({
+          text: message,
+          isError,
+        })),
+      },
+    });
+  };
+
+  const submitLogout = () => {
+    authDispatch({
+      type: "LOGOUT",
+      payload: {
+        userId: null,
+        userToken: null,
+      },
+    });
+    setFormMessages(["You've logged out successfully"], false);
+    history.push("/");
+  };
+
+  // useEffect(() => {
+  //   validateAccountResponse();
+  // }, []);
 
   const firstName = data?.user?.firstName || "";
   const lastName = data?.user?.lastName || "";
