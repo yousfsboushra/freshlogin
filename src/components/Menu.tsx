@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "@material-ui/core";
-import { Link, useLocation } from "react-router-dom";
 import { pages } from "../pages/pages";
+import { AuthContext } from "../app/auth/provider";
 
 function Menu() {
-  const location = useLocation();
+  const { authState } = useContext(AuthContext);
+
+  const userjwt = localStorage.getItem("userjwt");
+  console.log("userjwt from menu: ", userjwt);
   return (
     <>
       {pages.map((page) => {
-        return location.pathname === page.url ? null : (
-          <Link key={page.key} to={page.url}>
-            <Button variant="text" color="primary">
-              {page.name}
-            </Button>
-          </Link>
+        return authState.isLoggedIn !== page.auth ? null : (
+          <Button key={page.key} variant="text" color="primary">
+            {page.name}
+          </Button>
         );
       })}
     </>

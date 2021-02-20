@@ -8,6 +8,7 @@ interface Page {
   url: string;
   name: string;
   component: ComponentType;
+  auth: boolean;
 }
 
 export const pages: Array<Page> = [
@@ -16,11 +17,13 @@ export const pages: Array<Page> = [
     url: "/account",
     name: "Account",
     component: Account,
+    auth: true,
   },
   {
     key: "login",
     url: "/",
     name: "Login",
     component: Login,
+    auth: false,
   },
 ];

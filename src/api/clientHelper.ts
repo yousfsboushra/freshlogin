@@ -1,14 +1,38 @@
-import { ApolloClient, ApolloError, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloError,
+  ApolloLink,
+  concat,
+  createHttpLink,
+  InMemoryCache,
+} from "@apollo/client";
 import { GraphQLError } from "graphql";
+// import { setContext } from "@apollo/client/link/context";
 
-const userjwt = localStorage.getItem("userjwt");
-export const apolloClient = new ApolloClient({
-  uri: process.env.REACT_APP_API_ENDPOINT,
-  cache: new InMemoryCache(),
-  headers: {
-    authorization: userjwt !== null ? "Bearer " + userjwt : "",
-  },
-});
+// From apollo docs https://www.apollographql.com/docs/react/networking/authentication/#header
+export const createApolloClient = () => {
+  const httpLink = createHttpLink({
+    uri: process.env.REACT_APP_API_ENDPOINT,
+  });
+
+  const authMiddleware = new ApolloLink((operation, forward) => {
+    const userjwt = localStorage.getItem("userjwt");
+    operation.setContext({
+      headers: {
+        authorization: userjwt ? `Bearer ${userjwt}` : "",
+      },
+    });
+
+    return forward(operation);
+  });
+
+  const client = new ApolloClient({
+    link: concat(authMiddleware, httpLink),
+    cache: new InMemoryCache(),
+  });
+
+  return client;
+};
 
 export const extractGraphQLErrors = (error: ApolloError) => {
   const errors = error.graphQLErrors.map((graphQLError: GraphQLError) => {

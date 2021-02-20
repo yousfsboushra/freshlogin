@@ -7,9 +7,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import { ApolloError, useQuery } from "@apollo/client";
-import { extractGraphQLErrors } from "../api/client";
+import { extractGraphQLErrors } from "../api/clientHelper";
 import { ACCOUNT_QUERY } from "../api/queries";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { AuthContext } from "../app/auth/provider";
+import { useContext } from "react";
 
 const useStyles = makeStyles({
   textfield: {
@@ -25,8 +27,10 @@ function Account() {
   const history = useHistory();
   const classes = useStyles();
 
+  const { authState, authDispatch } = useContext(AuthContext);
+
   const { loading, error, data } = useQuery(ACCOUNT_QUERY, {
-    variables: { id: localStorage.getItem("userid") },
+    variables: { id: authState.userId },
   });
 
   const checkForInvalidToken = (error: ApolloError) => {
@@ -43,16 +47,32 @@ function Account() {
   }
 
   const submitLogout = () => {
-    localStorage.removeItem("userjwt");
-    localStorage.removeItem("userid");
+    authDispatch({
+      type: "LOGOUT",
+      payload: {
+        userId: null,
+        userToken: null,
+      },
+    });
+
+    console.log("dispatch from account");
     history.push("/");
   };
 
   return (
     <Box mt="3rem" mx="1.5rem">
       <Typography variant="h1">Account</Typography>
-      {error ? (
-        <Typography color="error">Something went wrong</Typography>
+      {!authState.isLoggedIn ? (
+        <Box>
+          <Typography color="error">
+            You are not logged in, please <Link to="/">login</Link> to see your
+            account.
+          </Typography>
+        </Box>
+      ) : error ? (
+        <Box>
+          <Typography color="error">Something went wrong</Typography>
+        </Box>
       ) : (
         <form
           autoComplete="off"

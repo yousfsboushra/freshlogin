@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -8,11 +8,12 @@ import {
   Typography,
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import { useMutation } from "@apollo/client";
+import { useApolloClient, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
-import { executeMutation } from "../api/client";
+import { executeMutation } from "../api/clientHelper";
 import { LOGIN_MUTATION } from "../api/mutations";
 import jwt_decode from "jwt-decode";
+import { AuthContext } from "../app/auth/provider";
 
 const useStyles = makeStyles({
   box: {
@@ -39,6 +40,7 @@ const useStyles = makeStyles({
 
 function Login() {
   const classes = useStyles();
+  const client = useApolloClient();
 
   const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
@@ -51,13 +53,13 @@ function Login() {
     LOGIN_MUTATION
   );
   const history = useHistory();
+  const { authState, authDispatch } = useContext(AuthContext);
 
   useEffect(() => {
     const userjwt = localStorage.getItem("userjwt");
     if (userjwt !== null && userjwt !== "") {
       history.push("/account");
     }
-    console.log(userjwt);
   }, [history]);
 
   const checkEmail = (email: string) => {
@@ -95,8 +97,15 @@ function Login() {
       );
       setIsLoggedIn(true);
       const decodedToken: { id: string } = jwt_decode(token);
-      localStorage.setItem("userjwt", token);
-      localStorage.setItem("userid", decodedToken.id);
+      authDispatch({
+        type: "LOGIN",
+        payload: {
+          userId: decodedToken.id,
+          userToken: token,
+        },
+      });
+      client.clearStore();
+      console.log("dispatch from login", authState);
 
       setTimeout(() => {
         history.push("/account");
