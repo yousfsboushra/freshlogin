@@ -12,12 +12,13 @@ import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import { executeMutation } from "../api/client";
 import { LOGIN_MUTATION } from "../api/mutations";
+import jwt_decode from "jwt-decode";
 
 const useStyles = makeStyles({
   box: {
     textAlign: "center",
     maxWidth: "600px",
-    margin: "0 auto",
+    margin: "3rem auto 0",
   },
   title: {
     marginBottom: "1rem",
@@ -34,7 +35,6 @@ const useStyles = makeStyles({
     marginTop: "1rem",
     width: "100%",
   },
-  alert: {},
 });
 
 function Login() {
@@ -84,6 +84,7 @@ function Login() {
 
   const loginSuccessCallback = (result: any) => {
     if (result.data.login.jwt !== "") {
+      const token = result.data.login.jwt;
       console.log("Login Data: ", result.data.login.jwt);
       setFormMessages(
         [
@@ -93,7 +94,10 @@ function Login() {
         false
       );
       setIsLoggedIn(true);
-      localStorage.setItem("userjwt", result.data.login.jwt);
+      const decodedToken: { id: string } = jwt_decode(token);
+      localStorage.setItem("userjwt", token);
+      localStorage.setItem("userid", decodedToken.id);
+
       setTimeout(() => {
         history.push("/account");
       }, 2000);
@@ -118,14 +122,13 @@ function Login() {
   return (
     <Grid container alignContent="center">
       <Grid item xs={12}>
-        <Box mt="5rem" className={classes.box}>
+        <Box className={classes.box}>
           <Typography className={classes.title} variant="h1">
             Login
           </Typography>
           {messages.length > 0 && messages[0] !== "" ? (
             <Box mb="2rem">
               <MuiAlert
-                className={classes.alert}
                 variant="filled"
                 severity={isError ? "error" : "success"}
               >

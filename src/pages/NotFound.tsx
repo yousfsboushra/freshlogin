@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
   content: {
     textAlign: "center",
-    margin: "5rem 0 5rem",
+    margin: "5rem 0",
   },
 });
 
