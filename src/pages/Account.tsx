@@ -12,6 +12,8 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../app/auth/provider";
 import { NotificationsContext } from "../app/notifications/provider";
 import { useContext } from "react";
+import { useCurrentLanguage } from "./pages";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles({
   textfield: {
@@ -24,8 +26,10 @@ const useStyles = makeStyles({
   },
 });
 function Account() {
+  const { t } = useTranslation();
   const history = useHistory();
   const classes = useStyles();
+  const languagePrefix = useCurrentLanguage();
 
   const { authState, authDispatch } = useContext(AuthContext);
   const { notificationsDispatch } = useContext(NotificationsContext);
@@ -42,28 +46,25 @@ function Account() {
               userToken: null,
             },
           });
-          setFormMessages(["Your token has expired, please login again"], true);
-          history.push("/");
+          setFormMessages(["messages.invalidToken"], true);
+          history.push(languagePrefix + "/");
         } else {
           setFormMessages([err], true);
         }
       });
     } else {
-      setFormMessages([error.message], true);
+      setFormMessages(
+        [`${"messages.api." + error.message.replaceAll(/[ .:]/gi, "_")}`],
+        true
+      );
     }
   };
 
   const validateAccountResponse = () => {
     if (!authState.isLoggedIn) {
-      setFormMessages(
-        ["You are not logged in, please login to see your account"],
-        true
-      );
+      setFormMessages(["messages.notloggedin"], true);
     } else if (data?.user === null) {
-      setFormMessages(
-        ["Account not found, please logout and login again"],
-        true
-      );
+      setFormMessages(["messages.accountNotFound"], true);
     } else if (error) {
       parseApolloErrors(error);
     }
@@ -95,19 +96,15 @@ function Account() {
         userToken: null,
       },
     });
-    setFormMessages(["You've logged out successfully"], false);
-    history.push("/");
+    setFormMessages(["messages.loggedOutSuccess"], false);
+    history.push(languagePrefix + "/");
   };
-
-  // useEffect(() => {
-  //   validateAccountResponse();
-  // }, []);
 
   const firstName = data?.user?.firstName || "";
   const lastName = data?.user?.lastName || "";
   return (
     <Box mt="3rem" mx="1.5rem">
-      <Typography variant="h1">Account</Typography>
+      <Typography variant="h1">{t("pages.account.title")}</Typography>
       <form
         autoComplete="off"
         onSubmit={(e) => {
@@ -120,8 +117,8 @@ function Account() {
             className={classes.textfield}
             id="firstname"
             name="firstname"
-            label="First Name"
-            value={loading ? "Loading..." : firstName}
+            label={t("pages.account.firstname.label")}
+            value={loading ? t("pages.account.firstname.loading") : firstName}
             variant="standard"
             disabled
           />
@@ -130,8 +127,8 @@ function Account() {
           <TextField
             className={classes.textfield}
             id="lastName"
-            label="Last Name"
-            value={loading ? "Loading..." : lastName}
+            label={t("pages.account.lastname.label")}
+            value={loading ? t("account.lastname.loading") : lastName}
             variant="standard"
             disabled
           />
@@ -143,7 +140,7 @@ function Account() {
             color="primary"
             type="submit"
           >
-            Logout
+            {t("pages.account.logout.label")}
           </Button>
         </Box>
       </form>

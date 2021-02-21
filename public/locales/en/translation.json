@@ -1,0 +1,51 @@
+{
+  "pages": {
+    "login": {
+      "linkText": "Login",
+      "title": "Login",
+      "email": {
+        "label": "Email",
+        "helperText": "Email is not valid"
+      },
+      "password": {
+        "label": "Password",
+        "helperText": "Password is required"
+      },
+      "submit": {
+        "label": "Login",
+        "loading": "Loading..."
+      }
+    },
+    "account": {
+      "linkText": "Account",
+      "title": "Account",
+      "firstname": {
+        "label": "First Name",
+        "loading": "Loading..."
+      },
+      "lastname": {
+        "label": "Last Name",
+        "loading": "Loading..."
+      },
+      "logout": {
+        "label": "Logout"
+      }
+    },
+    "notFound": {
+      "title": "Page not found"
+    }
+  },
+  "messages": {
+    "checkCredentials": "Something went wrong. Please check your credentials and try again",
+    "loggedInSuccess": "You have logged in successfully",
+    "notloggedin": "You are not logged in. Please login to see your account",
+    "invalidToken": "Your token has expired. Please login again",
+    "accountNotFound": "Account not found. Please login and try again",
+    "loggedOutSuccess": "You've logged out successfully",
+    "api": {
+      "Auth_form_error_invalid": "Email or password is invalid",
+      "Response_not_successful__Received_status_code_400": "Something went wrong"
+    }
+  },
+  "Failed to fetch": "Something went wrong. Please make sure you have internet connection"
+}

@@ -2,8 +2,10 @@ import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import React, { useContext, useEffect } from "react";
 import { NotificationsContext } from "../app/notifications/provider";
+import { useTranslation } from "react-i18next";
 
 function Notifications() {
+  const { t } = useTranslation();
   const [open, setOpen] = React.useState(true);
   const [currentMessage, setCurrentMessage] = React.useState({
     text: "",
@@ -39,6 +41,7 @@ function Notifications() {
       });
     }, 100);
   };
+
   return (
     <>
       {currentMessage.text !== "" ? (
@@ -47,7 +50,7 @@ function Notifications() {
             onClose={handleClose}
             severity={currentMessage.isError ? "error" : "success"}
           >
-            {currentMessage.text}
+            {t(currentMessage.text)}
           </MuiAlert>
         </Snackbar>
       ) : null}

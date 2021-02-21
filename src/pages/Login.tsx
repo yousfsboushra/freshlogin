@@ -14,6 +14,8 @@ import { LOGIN_MUTATION } from "../api/mutations";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../app/auth/provider";
 import { NotificationsContext } from "../app/notifications/provider";
+import { useTranslation } from "react-i18next";
+import { useCurrentLanguage } from "../pages/pages";
 
 const useStyles = makeStyles({
   box: {
@@ -39,7 +41,9 @@ const useStyles = makeStyles({
 });
 
 function Login() {
+  const { t } = useTranslation();
   const classes = useStyles();
+  const languagePrefix = useCurrentLanguage();
 
   const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
@@ -56,9 +60,9 @@ function Login() {
   useEffect(() => {
     const userjwt = localStorage.getItem("userjwt");
     if (userjwt !== null && userjwt !== "") {
-      history.push("/account");
+      history.push(languagePrefix + "/account");
     }
-  }, [history]);
+  }, [history, languagePrefix]);
 
   const checkEmail = (email: string) => {
     // Form formik documentation https://formik.org/docs/overview
@@ -92,7 +96,7 @@ function Login() {
   const loginSuccessCallback = (result: any) => {
     if (result.data.login.jwt !== "") {
       const token = result.data.login.jwt;
-      setFormMessages(["You have logged in successfully :)"], false);
+      setFormMessages(["messages.loggedInSuccess"], false);
       setIsLoggedIn(true);
       const decodedToken: { id: string } = jwt_decode(token);
       authDispatch({
@@ -102,12 +106,9 @@ function Login() {
           userToken: token,
         },
       });
-      history.push("/account");
+      history.push(languagePrefix + "/account");
     } else {
-      setFormMessages(
-        ["Something went wrong, please check your credentials and try again."],
-        true
-      );
+      setFormMessages(["messages.checkCredentials"], true);
     }
   };
 
@@ -125,9 +126,10 @@ function Login() {
       <Grid item xs={12}>
         <Box className={classes.box}>
           <Typography className={classes.title} variant="h1">
-            Login
+            {t("pages.login.title")}
           </Typography>
           <form
+            autoComplete="off"
             onSubmit={(e) => {
               e.preventDefault();
               submitLogin();
@@ -139,9 +141,12 @@ function Login() {
                 className={classes.textfield}
                 error={!isEmailValid}
                 id="email"
-                label="Email"
+                label={t("pages.login.email.label")}
                 required
                 defaultValue={email}
+                helperText={
+                  isEmailValid ? "" : t("pages.login.email.helperText")
+                }
                 variant="standard"
                 onChange={(event) => {
                   setEmail(event.target.value);
@@ -156,10 +161,12 @@ function Login() {
                 error={!isPasswordValid}
                 type="password"
                 id="password"
-                label="Password"
+                label={t("pages.login.password.label")}
                 required
                 defaultValue={password}
-                helperText={isPasswordValid ? "" : "Password is required"}
+                helperText={
+                  isPasswordValid ? "" : t("pages.login.password.helperText")
+                }
                 variant="standard"
                 onChange={(event) => {
                   setPassword(event.target.value);
@@ -181,7 +188,9 @@ function Login() {
                   loginMutationLoading
                 }
               >
-                {loginMutationLoading ? "Loading..." : "Login"}
+                {loginMutationLoading
+                  ? t("pages.login.submit.loading")
+                  : t("pages.login.submit.label")}
               </Button>
             </div>
           </form>

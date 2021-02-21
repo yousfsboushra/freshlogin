@@ -6,6 +6,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles({
   root: {
@@ -19,13 +20,14 @@ const useStyles = makeStyles({
 });
 
 function NotFound() {
+  const { t } = useTranslation();
   const classes = useStyles();
   return (
     <Box mt="5rem">
       <Card raised className={classes.root}>
         <CardContent className={classes.content}>
           <Typography variant="h1" color="error">
-            Page Not Found
+            {t("pages.notFound.title")}
           </Typography>
         </CardContent>
       </Card>

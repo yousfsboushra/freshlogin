@@ -7,7 +7,6 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { GraphQLError } from "graphql";
-// import { setContext } from "@apollo/client/link/context";
 
 // From apollo docs https://www.apollographql.com/docs/react/networking/authentication/#header
 export const createApolloClient = () => {
@@ -36,13 +35,13 @@ export const createApolloClient = () => {
 
 export const extractGraphQLErrors = (error: ApolloError) => {
   const errors = error.graphQLErrors.map((graphQLError: GraphQLError) => {
-    if (
-      graphQLError?.extensions?.exception?.data?.data[0]?.messages[0].message
-    ) {
-      return graphQLError.extensions.exception.data.data[0].messages[0].message;
+    let msg = "";
+    if (graphQLError?.extensions?.exception?.data?.data[0]?.messages[0].id) {
+      msg = graphQLError.extensions.exception.data.data[0].messages[0].id;
     } else {
-      return graphQLError.message;
+      msg = graphQLError.message;
     }
+    return `messages.api.${msg.replaceAll(/[ .:]/gi, "_")}`;
   });
   return errors;
 };
