@@ -35,11 +35,11 @@ i18n
     detection: {
       order: [
         "path",
+        "navigator",
         "querystring",
         "cookie",
         "localStorage",
         "sessionStorage",
-        "navigator",
         "htmlTag",
         "subdomain",
       ],
