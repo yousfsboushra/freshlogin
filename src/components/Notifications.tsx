@@ -7,27 +7,14 @@ import { useTranslation } from "react-i18next";
 function Notifications() {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(true);
-  const [currentMessage, setCurrentMessage] = React.useState({
-    text: "",
-    isError: false,
-  });
   const { notificationsState, notificationsDispatch } = useContext(
     NotificationsContext
   );
 
-  const clearMessage = () => {
-    setCurrentMessage({
-      text: "",
-      isError: false,
-    });
-  };
-
   useEffect(() => {
     if (notificationsState.messages.length > 0) {
-      setCurrentMessage(notificationsState.messages[0]);
       setOpen(true);
     } else {
-      clearMessage();
       setOpen(false);
     }
   }, [notificationsState]);
@@ -44,13 +31,16 @@ function Notifications() {
 
   return (
     <>
-      {currentMessage.text !== "" ? (
+      {notificationsState.messages.length > 0 &&
+      notificationsState.messages[0]?.text !== "" ? (
         <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
           <MuiAlert
             onClose={handleClose}
-            severity={currentMessage.isError ? "error" : "success"}
+            severity={
+              notificationsState.messages[0]?.isError ? "error" : "success"
+            }
           >
-            {t(currentMessage.text)}
+            {t(notificationsState.messages[0].text)}
           </MuiAlert>
         </Snackbar>
       ) : null}
