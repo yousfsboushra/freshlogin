@@ -11,19 +11,23 @@ interface Page {
   component: ComponentType;
   auth: boolean;
 }
-interface Lang {
+interface Language {
   key: string;
   name: string;
 }
-export const defLang = "en";
-export const langs: Array<Lang> = [
+export const defaultLanguage = "en";
+export const languages: Array<Language> = [
   {
     key: "en",
     name: "English",
   },
   {
     key: "de",
-    name: "Deutsch",
+    name: "Deutsche",
+  },
+  {
+    key: "fr",
+    name: "Français",
   },
 ];
 export const pages: Array<Page> = [
@@ -44,12 +48,12 @@ export const pages: Array<Page> = [
 ];
 
 const pagesWithLang: Array<Page> = [];
-langs.forEach((lang) => {
+languages.forEach((language) => {
   pages.forEach((page) => {
-    if (lang.key === defLang) {
+    if (language.key === defaultLanguage) {
       pagesWithLang.push(page);
     } else {
-      pagesWithLang.push({ ...page, url: "/" + lang.key + page.url });
+      pagesWithLang.push({ ...page, url: "/" + language.key + page.url });
     }
   });
 });
@@ -59,9 +63,18 @@ export const availableUrls: Array<Page> = pagesWithLang;
 export const useCurrentLanguage = () => {
   const location = useLocation();
   const firstArg = location.pathname.substr(1).split("/")[0];
+  let currentLanguage = defaultLanguage;
+  if (languages.find((language) => language.key === firstArg)) {
+    currentLanguage = firstArg;
+  }
+  return currentLanguage;
+};
+
+export const useCurrentLanguagePrefix = () => {
+  const currentLanguage = useCurrentLanguage();
   let languagePrefix = "";
-  if (langs.find((lang) => lang.key === firstArg)) {
-    languagePrefix = "/" + firstArg;
+  if (currentLanguage !== defaultLanguage) {
+    languagePrefix = "/" + currentLanguage;
   }
   return languagePrefix;
 };

@@ -12,7 +12,7 @@ export const NotificationsContext = createContext<{
   notificationsDispatch: () => null,
 });
 
-const AuthProvider: FC = ({ children }) => {
+const NotificationsProvider: FC = ({ children }) => {
   const [notificationsState, notificationsDispatch] = React.useReducer(
     notificationsReducer,
     initialNotificationsState
@@ -29,4 +29,4 @@ const AuthProvider: FC = ({ children }) => {
   );
 };
 
-export default AuthProvider;
+export default NotificationsProvider;

@@ -8,7 +8,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Header from "./components/Header";
-import { defLang, pages, availableUrls } from "./pages/pages";
+import { defaultLanguage, pages, availableUrls } from "./pages/pages";
 import { ApolloProvider } from "@apollo/client";
 import AuthProvider from "./app/auth/provider";
 import NotificationsProvider from "./app/notifications/provider";
@@ -44,7 +44,7 @@ function App() {
                         <Redirect
                           key={page.key}
                           exact
-                          from={"/" + defLang + page.url}
+                          from={"/" + defaultLanguage + page.url}
                           to={page.url}
                         />
                       ))}

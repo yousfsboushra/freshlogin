@@ -15,7 +15,7 @@ import jwt_decode from "jwt-decode";
 import { AuthContext } from "../app/auth/provider";
 import { NotificationsContext } from "../app/notifications/provider";
 import { useTranslation } from "react-i18next";
-import { useCurrentLanguage } from "../pages/pages";
+import { useCurrentLanguagePrefix } from "../pages/pages";
 
 const useStyles = makeStyles({
   box: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
 function Login() {
   const { t } = useTranslation();
   const classes = useStyles();
-  const languagePrefix = useCurrentLanguage();
+  const languagePrefix = useCurrentLanguagePrefix();
 
   const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);

@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import Menu from "./Menu";
+import LanguageSwitch from "./LanguageSwitch";
 
 const useStyles = makeStyles({
   login: {
@@ -28,6 +29,7 @@ function Header() {
           <Grid item sm={6} xs={12}>
             <Box className={classes.login}>
               <Menu />
+              <LanguageSwitch />
             </Box>
           </Grid>
         </Grid>

@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../app/auth/provider";
 import { NotificationsContext } from "../app/notifications/provider";
 import { useContext } from "react";
-import { useCurrentLanguage } from "./pages";
+import { useCurrentLanguagePrefix } from "./pages";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles({
@@ -29,7 +29,7 @@ function Account() {
   const { t } = useTranslation();
   const history = useHistory();
   const classes = useStyles();
-  const languagePrefix = useCurrentLanguage();
+  const languagePrefix = useCurrentLanguagePrefix();
 
   const { authState, authDispatch } = useContext(AuthContext);
   const { notificationsDispatch } = useContext(NotificationsContext);
@@ -128,7 +128,7 @@ function Account() {
             className={classes.textfield}
             id="lastName"
             label={t("pages.account.lastname.label")}
-            value={loading ? t("account.lastname.loading") : lastName}
+            value={loading ? t("pages.account.lastname.loading") : lastName}
             variant="standard"
             disabled
           />
