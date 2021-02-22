@@ -131,16 +131,18 @@ function Account() {
             disabled
           />
         </Box>
-        <Box>
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
-            {t("pages.account.logout.label")}
-          </Button>
-        </Box>
+        {authState.isLoggedIn ? (
+          <Box>
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              type="submit"
+            >
+              {t("pages.account.logout.label")}
+            </Button>
+          </Box>
+        ) : null}
       </form>
     </Box>
   );
