@@ -1,4 +1,62 @@
+# Freshlogin App
+
+## Important Packages:
+
+- I have used [Material-UI](https://material-ui.com/) for user interface.
+- I have user [Apollo Client](https://www.apollographql.com/docs/react/get-started/) for interactions with the graphql endpoint.
+- I have used [react-router-dom](https://www.npmjs.com/package/react-router-dom) for handling routes.
+- I have used [i18next](https://www.i18next.com/) for localization.
+- I have used [jwt-decode](https://www.npmjs.com/package/jwt-decode) to extract the user id from the JWT token.
+
+## Assumptions and Decisions:
+
+- I have added some customization to the theme in `src/theme/index.ts` to show how I usually do that.
+- I have used the latest **unstable**- version of the `createMuiTheme` to fix `findDOMNode is deprecated in StrictMode` warning.
+- I have used Google translate for translating content into German.
+- The French translation does not exist, so it will fall back to the default language.
+- I have created `AuthContext` to share authentication status between components.
+- I have created `NotificationsContext` to share notifications between components.
+- The notifications component will continue showing notifications as long as there are remaining items in the context.
+
+## TODO
+
+- Add unit tests
+- Support RTL languages like Arabic.
+
+<br />
+
+## Demo
+
+<br />
+
+![alt text](./demo.gif)
+
+<br />
+
+- For testing purposes, please check the demo in https://freshlogin.netlify.app/
+- The demo is hosted on [Netlify](https://www.netlify.com/) using a free account.
+- The demo is connected to the graphql endpoint which was sent in the task.
+
+  <br />
+
+## How to run the code on your machine:
+
+<br />
+
+- Clone the repository.
+- In the project directory, you need to run `yarn` to install the packages.
+- Rename `.env.example` to `.env` and add the graphql endpoint to it ex. `https://example/graphql`
+- Then, you can run `yarn start` to run the app.
+- Finally, Open http://localhost:3000 to view it in the browser.
+  <br /><br /><br /><br />
+
+#
+
+<br /><br /><br />
+
 # Getting Started with Create React App
+
+<br />
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
