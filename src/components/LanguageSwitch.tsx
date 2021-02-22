@@ -1,15 +1,13 @@
 import { IconButton, Menu, MenuItem } from "@material-ui/core";
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { defaultLanguage, languages, useCurrentLanguage } from "../pages/pages";
 import LanguageIcon from "@material-ui/icons/Language";
-import i18n from "../i18n";
+import i18n, { defaultLanguage, languages } from "../i18n";
 
 function LanguageSwitch() {
-  const currentLanguage = useCurrentLanguage();
+  const currentLanguage = i18n.language;
   const location = useLocation();
   const history = useHistory();
-  const [languageState, setlanguageState] = useState(currentLanguage);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -19,9 +17,8 @@ function LanguageSwitch() {
     const newPrefix =
       "/" + (language === defaultLanguage ? "" : language + "/");
     const newLocation = location.pathname.replace(oldPrefix, newPrefix);
-    setlanguageState(language);
-    i18n.changeLanguage(language);
     history.push(newLocation);
+    i18n.changeLanguage(language);
     handleClose();
   };
 
@@ -56,7 +53,7 @@ function LanguageSwitch() {
           <MenuItem
             key={language.key}
             onClick={() => changeLanguage(language.key)}
-            selected={languageState === language.key}
+            selected={currentLanguage === language.key}
           >
             {language.name}
           </MenuItem>

@@ -8,13 +8,13 @@ import {
   Redirect,
 } from "react-router-dom";
 import Header from "./components/Header";
-import { defaultLanguage, pages, availableUrls } from "./pages/pages";
+import { pages, pagesWithLanguagePrefix } from "./pages/pages";
 import { ApolloProvider } from "@apollo/client";
 import AuthProvider from "./app/auth/provider";
 import NotificationsProvider from "./app/notifications/provider";
 import { createApolloClient } from "./api/clientHelper";
 import Notifications from "./components/Notifications";
-import "./i18n";
+import { defaultLanguage } from "./i18n";
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
                   </Grid>
                   <Grid item xs={12}>
                     <Switch>
-                      {availableUrls.map((page) => (
+                      {pagesWithLanguagePrefix.map((page) => (
                         <Route
                           key={page.key}
                           path={page.url}

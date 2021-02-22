@@ -15,7 +15,7 @@ import jwt_decode from "jwt-decode";
 import { AuthContext } from "../app/auth/provider";
 import { NotificationsContext } from "../app/notifications/provider";
 import { useTranslation } from "react-i18next";
-import { useCurrentLanguagePrefix } from "../pages/pages";
+import { useUrlWithLanguagePrefix } from "../i18n";
 
 const useStyles = makeStyles({
   box: {
@@ -43,7 +43,6 @@ const useStyles = makeStyles({
 function Login() {
   const { t } = useTranslation();
   const classes = useStyles();
-  const languagePrefix = useCurrentLanguagePrefix();
 
   const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
@@ -56,13 +55,14 @@ function Login() {
   const history = useHistory();
   const { authDispatch } = useContext(AuthContext);
   const { notificationsDispatch } = useContext(NotificationsContext);
+  const accountUrl = useUrlWithLanguagePrefix("account");
 
   useEffect(() => {
     const userjwt = localStorage.getItem("userjwt");
     if (userjwt !== null && userjwt !== "") {
-      history.push(languagePrefix + "/account");
+      history.push(accountUrl);
     }
-  }, [history, languagePrefix]);
+  }, [history, accountUrl]);
 
   const checkEmail = (email: string) => {
     // Form formik documentation https://formik.org/docs/overview
@@ -106,7 +106,7 @@ function Login() {
           userToken: token,
         },
       });
-      history.push(languagePrefix + "/account");
+      history.push(accountUrl);
     } else {
       setFormMessages(["messages.checkCredentials"], true);
     }

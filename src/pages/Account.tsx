@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../app/auth/provider";
 import { NotificationsContext } from "../app/notifications/provider";
 import { useContext } from "react";
-import { useCurrentLanguagePrefix } from "./pages";
+import { useUrlWithLanguagePrefix } from "../i18n";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles({
@@ -29,7 +29,7 @@ function Account() {
   const { t } = useTranslation();
   const history = useHistory();
   const classes = useStyles();
-  const languagePrefix = useCurrentLanguagePrefix();
+  const loginUrl = useUrlWithLanguagePrefix("");
 
   const { authState, authDispatch } = useContext(AuthContext);
   const { notificationsDispatch } = useContext(NotificationsContext);
@@ -47,7 +47,7 @@ function Account() {
             },
           });
           setFormMessages(["messages.invalidToken"], true);
-          history.push(languagePrefix + "/");
+          history.push(loginUrl);
         } else {
           setFormMessages([err], true);
         }
@@ -97,7 +97,7 @@ function Account() {
       },
     });
     setFormMessages(["messages.loggedOutSuccess"], false);
-    history.push(languagePrefix + "/");
+    history.push(loginUrl);
   };
 
   const firstName = data?.user?.firstName || "";

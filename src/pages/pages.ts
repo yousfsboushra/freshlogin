@@ -1,6 +1,5 @@
 import { lazy, ComponentType } from "react";
-import { useLocation } from "react-router-dom";
-
+import { languages, defaultLanguage } from "../i18n";
 const Login = lazy(() => import("./Login"));
 const Account = lazy(() => import("./Account"));
 
@@ -11,25 +10,7 @@ interface Page {
   component: ComponentType;
   auth: boolean;
 }
-interface Language {
-  key: string;
-  name: string;
-}
-export const defaultLanguage = "en";
-export const languages: Array<Language> = [
-  {
-    key: "en",
-    name: "English",
-  },
-  {
-    key: "de",
-    name: "Deutsche",
-  },
-  {
-    key: "fr",
-    name: "Français",
-  },
-];
+
 export const pages: Array<Page> = [
   {
     key: "account",
@@ -47,34 +28,16 @@ export const pages: Array<Page> = [
   },
 ];
 
-const pagesWithLang: Array<Page> = [];
+export const pagesWithLanguagePrefix: Array<Page> = [];
 languages.forEach((language) => {
   pages.forEach((page) => {
     if (language.key === defaultLanguage) {
-      pagesWithLang.push(page);
+      pagesWithLanguagePrefix.push(page);
     } else {
-      pagesWithLang.push({ ...page, url: "/" + language.key + page.url });
+      pagesWithLanguagePrefix.push({
+        ...page,
+        url: "/" + language.key + page.url,
+      });
     }
   });
 });
-
-export const availableUrls: Array<Page> = pagesWithLang;
-
-export const useCurrentLanguage = () => {
-  const location = useLocation();
-  const firstArg = location.pathname.substr(1).split("/")[0];
-  let currentLanguage = defaultLanguage;
-  if (languages.find((language) => language.key === firstArg)) {
-    currentLanguage = firstArg;
-  }
-  return currentLanguage;
-};
-
-export const useCurrentLanguagePrefix = () => {
-  const currentLanguage = useCurrentLanguage();
-  let languagePrefix = "";
-  if (currentLanguage !== defaultLanguage) {
-    languagePrefix = "/" + currentLanguage;
-  }
-  return languagePrefix;
-};
