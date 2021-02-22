@@ -18,11 +18,9 @@ import { useTranslation } from "react-i18next";
 const useStyles = makeStyles({
   textfield: {
     marginBottom: "1rem",
-    width: "100%",
   },
   button: {
     marginTop: "1rem",
-    width: "100%",
   },
 });
 function Account() {

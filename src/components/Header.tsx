@@ -1,22 +1,9 @@
 import React from "react";
-import {
-  AppBar,
-  Box,
-  Grid,
-  makeStyles,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { AppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
 import Menu from "./Menu";
 import LanguageSwitch from "./LanguageSwitch";
 
-const useStyles = makeStyles({
-  login: {
-    float: "right",
-  },
-});
 function Header() {
-  const classes = useStyles();
   return (
     <AppBar position="static" color="default">
       <Toolbar>
@@ -27,7 +14,7 @@ function Header() {
             </Typography>
           </Grid>
           <Grid item sm={6} xs={12}>
-            <Box className={classes.login}>
+            <Box textAlign="right">
               <Menu />
               <LanguageSwitch />
             </Box>

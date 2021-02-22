@@ -32,11 +32,9 @@ const useStyles = makeStyles({
   },
   textfield: {
     marginBottom: "1rem",
-    width: "100%",
   },
   button: {
     marginTop: "1rem",
-    width: "100%",
   },
 });
 

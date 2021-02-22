@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { pages } from "../pages/pages";
 import { AuthContext } from "../app/auth/provider";
 import { Link } from "react-router-dom";
@@ -13,9 +13,9 @@ function Menu() {
       {pages.map((page) => {
         return authState.isLoggedIn !== page.auth ? null : (
           <Link key={page.key} to={page.url}>
-            <Button variant="text" color="primary">
+            <Typography color="secondary" component="span">
               {t(page.name)}
-            </Button>
+            </Typography>
           </Link>
         );
       })}

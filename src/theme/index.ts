@@ -53,12 +53,20 @@ export const theme = createMuiTheme({
       },
     },
     MuiButton: {
+      root: {
+        width: "100%",
+      },
       containedPrimary: {
         color: colors.white,
         backgroundColor: colors.darkBlue,
       },
       textPrimary: {
         color: colors.white,
+      },
+    },
+    MuiTextField: {
+      root: {
+        width: "100%",
       },
     },
   },
